@@ -1,28 +1,28 @@
-# Where Does My Money Go?
+# 錢錢都去哪裡了
 
-A multi-currency budgeting app for working holiday travelers and people living abroad. Track income and expenses, check exchange rates, and keep your financial records organized by account.
+為打工度假與旅居生活設計的多幣別記帳網站，支援收支管理、匯率參考、快速換算、帳號登入，以及依帳號隔離的雲端紀錄。
 
-## Live Demo
+## 線上試用
 
-[Open the app](https://wanderwise-budget.vercel.app/)
+[開啟錢錢都去哪裡了](https://wanderwise-budget.vercel.app/)
 
-## Features
+## 主要功能
 
-- Add, edit, and delete income and expense records
-- Track transactions in USD, TWD, EUR, JPY, and CAD
-- View spending and income by month or a custom date range
-- Check daily reference exchange rates and convert currencies
-- Sign in with Supabase Auth; database policies keep each user's records private to their account
+- 新增、編輯及刪除收入與支出紀錄
+- 支援 USD、TWD、EUR、JPY、CAD
+- 依月份或自訂日期區間查看收支圖表
+- 顯示每日參考匯率並提供快速換算
+- 使用 Supabase 帳號登入，並以資料庫權限隔離每位使用者的紀錄
 
-## Built With
+## 使用技術
 
-HTML, CSS, JavaScript, Tailwind CSS, Supabase, and the Frankfurter API.
+HTML、CSS、JavaScript、Tailwind CSS、Supabase、Frankfurter API。
 
-## Project Files
+## 專案檔案
 
-- `index.html` — Sign-in, registration, and budgeting interface
-- `app.js` — Authentication, transactions, charts, and exchange rates
-- `style.css` — UI styling and responsive layouts
-- `tailwind.generated.css` — Compiled Tailwind CSS
-- `config.js` — Supabase client configuration
-- `supabase/schema.sql` — Database table and row-level security policies
+- `index.html`：登入、註冊與記帳介面
+- `app.js`：帳號、收支、圖表與匯率功能
+- `style.css`：介面樣式與 RWD
+- `tailwind.generated.css`：編譯後的 Tailwind 樣式
+- `config.js`：Supabase 前端連線設定
+- `supabase/schema.sql`：資料表與使用者資料隔離政策
