@@ -1,0 +1,13 @@
+{
+  "name": "wanderwise-budget-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:css": "tailwindcss -i ./src/tailwind.css -o ./tailwind.generated.css --watch",
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./tailwind.generated.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

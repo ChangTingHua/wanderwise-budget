@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8f6" />
+  <title>錢錢都去哪裡了</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tailwind.generated.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen text-slate-800">
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-brand"><span class="brand-mark">w.</span><div><strong>錢錢都去哪裡了</strong><small>你的錢錢 我來追蹤</small></div></div>
+      <p class="eyebrow auth-eyebrow">YOUR PERSONAL MONEY SPACE</p>
+      <h1 id="authTitle">歡迎回來</h1>
+      <p id="authDescription" class="auth-description">登入帳號，繼續管理你的旅居收支。</p>
+      <div class="auth-tabs" role="tablist" aria-label="帳號操作">
+        <button id="loginTab" class="auth-tab active" type="button" role="tab" aria-selected="true">登入</button>
+        <button id="registerTab" class="auth-tab" type="button" role="tab" aria-selected="false">建立帳號</button>
+      </div>
+      <form id="authForm" method="post">
+        <label class="field-label">電子郵件
+          <input id="authEmail" name="email" type="email" autocomplete="username" required placeholder="you@example.com" />
+        </label>
+        <label class="field-label">密碼
+          <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="至少 8 個字元" />
+        </label>
+        <label id="confirmPasswordField" class="field-label hidden">確認密碼
+          <input id="authPasswordConfirm" name="passwordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="再次輸入密碼" />
+        </label>
+        <p id="authMessage" class="auth-message" role="alert" aria-live="polite"></p>
+        <button id="authSubmit" class="button-primary auth-submit" type="submit">登入</button>
+      </form>
+      <p class="auth-notice">帳號與記帳紀錄會儲存在雲端，登入後可跨裝置查看自己的資料。</p>
+    </div>
+  </section>
+
+  <div id="appShell" class="app-shell mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 hidden">
+    <div id="top">
+      <header class="flex items-center justify-between border-b border-slate-200/80 pb-5">
+        <a class="brand flex items-center gap-3" href="#top" aria-label="回到頁面頂端">
+          <span class="brand-mark">w.</span><span><strong>錢錢都去哪裡了</strong><small>你的錢錢 我來追蹤</small></span>
+        </a>
+        <div class="flex items-center gap-3">
+          <span id="signedInEmail" class="signed-in-email"></span>
+          <button id="logoutButton" class="logout-button" type="button">登出</button>
+          <button id="addTop" class="button-primary hidden sm:inline-flex">＋ 新增紀錄</button>
+          <button id="mobileAdd" class="button-primary sm:hidden" aria-label="新增紀錄">＋</button>
+        </div>
+      </header>
+    </div>
+
+    <main class="py-8">
+      <p id="appMessage" class="app-message hidden" role="status" aria-live="polite"></p>
+      <section class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+        <div>
+          <p id="greetingDate" class="eyebrow"></p>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">早安，美好的一天 <span aria-hidden="true"></span></h1>
+          <p class="mt-2 text-slate-500">今天也不要忘記記帳喔！</p>
+        </div>
+        <label class="currency-control">幣別
+          <select id="displayCurrency" aria-label="總覽幣別">
+            <option value="USD">🇺🇸 USD</option>
+            <option value="TWD">🇹🇼 TWD</option>
+            <option value="TWD" selected>🇹🇼 TWD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+            <option value="JPY">🇯🇵 JPY</option>
+            <option value="CAD">🇨🇦 CAD</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="grid gap-4 md:grid-cols-3" aria-label="財務摘要">
+        <article class="summary-card balance-card">
+          <div class="flex items-center justify-between"><span>本月結餘</span><span class="card-icon">↗</span></div>
+          <p id="balance" class="summary-number">—</p>
+          <p id="balanceHint" class="summary-foot">收入扣除支出</p>
+        </article>
+        <article class="summary-card">
+          <div class="flex items-center justify-between"><span>本月收入</span><span class="card-icon income-icon">＋</span></div>
+          <p id="income" class="summary-number">—</p>
+          <p class="summary-foot">包含薪資與小費</p>
+        </article>
+        <article class="summary-card">
+          <div class="flex items-center justify-between"><span>本月支出</span><span class="card-icon expense-icon">−</span></div>
+          <p id="expense" class="summary-number">—</p>
+          <p class="summary-foot">共 <span id="expenseCount">0</span> 筆消費</p>
+        </article>
+      </section>
+
+      <section class="mt-5 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+        <article class="panel">
+          <div class="panel-heading chart-heading">
+            <div>
+              <p class="eyebrow">YOUR MONEY, YOUR WAY</p>
+              <h2>收支概況</h2>
+            </div>
+            <div class="chart-range-controls">
+              <div class="chart-range-buttons">
+                <label class="sr-only" for="chartMonthSelect">選擇月份</label>
+                <select id="chartMonthSelect" class="filter-select" aria-label="選擇月份"></select>
+                <button id="openCustomRange" class="range-apply-button" type="button" aria-expanded="false" aria-controls="customChartRange">自訂區間</button>
+              </div>
+              <div id="customChartRange" class="custom-chart-range" hidden>
+                <label class="sr-only" for="chartStartDate">開始日期</label>
+                <input id="chartStartDate" type="date" aria-label="開始日期" required>
+                <span>至</span>
+                <label class="sr-only" for="chartEndDate">結束日期</label>
+                <input id="chartEndDate" type="date" aria-label="結束日期" required>
+                <button id="applyChartRange" class="range-apply-button" type="button">套用</button>
+                <span id="chartRangeError" class="chart-range-error" hidden>開始日期不可晚於結束日期</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-labels"><span>收入</span><span>支出</span></div>
+            <div id="chart" class="bar-chart" role="img" aria-label="收入與支出比較圖"></div>
+          </div>
+          <p class="chart-note">金額已換算為 <strong id="chartCurrency">USD</strong> · <span id="chartIntervalNote">每週統計</span></p>
+        </article>
+
+        <article class="panel rate-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">DAILY REFERENCE RATE</p><h2>匯率小幫手</h2></div>
+            <button id="refreshRates" class="rate-refresh" type="button" aria-label="重新取得匯率">↻ 更新</button>
+          </div>
+          <div class="rate-pair">
+            <label class="sr-only" for="rateFromCurrency">來源幣別</label>
+            <select id="rateFromCurrency" class="currency-chip" aria-label="匯率來源幣別">
+              <option value="USD">🇺🇸 USD</option>
+              <option value="TWD">🇹🇼 TWD</option>
+              <option value="TWD" selected>🇹🇼 TWD</option>
+              <option value="EUR">🇪🇺 EUR</option>
+              <option value="JPY">🇯🇵 JPY</option>
+              <option value="CAD">🇨🇦 CAD</option>
+            </select>
+            <span class="rate-arrow" aria-hidden="true">→</span>
+            <label class="sr-only" for="rateToCurrency">目標幣別</label>
+            <select id="rateToCurrency" class="currency-chip" aria-label="匯率目標幣別">
+              <option value="USD">🇺🇸 USD</option>
+              <option value="TWD" selected>🇹🇼 TWD</option>
+              <option value="EUR">🇪🇺 EUR</option>
+              <option value="JPY">🇯🇵 JPY</option>
+              <option value="CAD">🇨🇦 CAD</option>
+            </select>
+          </div>
+          <p id="rateValue" class="rate-value">載入匯率中…</p>
+          <p id="rateDate" class="rate-date">正在連線至匯率服務</p>
+          <div class="converter">
+            <label for="convertAmount">快速換算</label>
+            <div class="convert-row">
+              <input id="convertAmount" type="number" value="100" min="0" aria-label="換算金額">
+              <span id="convertFromLabel">USD</span>
+              <span class="convert-equals">=</span>
+              <strong id="convertedAmount">— TWD</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel mt-5">
+        <div class="panel-heading transactions-heading">
+          <div><p class="eyebrow">YOUR MONEY, YOUR WAY</p><h2>最近紀錄</h2></div>
+          <div class="flex items-center gap-2">
+            <select id="filterType" class="filter-select" aria-label="篩選紀錄">
+              <option value="all">全部紀錄</option>
+              <option value="expense">支出</option>
+              <option value="income">收入</option>
+            </select>
+            <button id="addBottom" class="button-primary" type="button">＋ 新增紀錄</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>項目</th><th>分類</th><th>日期</th><th class="text-right">金額</th><th class="text-right">操作</th></tr></thead>
+            <tbody id="transactionRows"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty-state hidden">目前沒有符合條件的紀錄</div>
+      </section>
+
+      <footer class="footer">
+        <span>Made for the in-between moments. <b>✳</b></span>
+        <span>匯率來源：Frankfurter · 參考匯率每日更新</span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="transactionDialog" class="transaction-dialog">
+    <form id="transactionForm">
+      <div class="dialog-top">
+        <div><p class="eyebrow">A LITTLE NOTE TO YOURSELF</p><h2 id="transactionDialogTitle">新增紀錄</h2></div>
+        <button type="button" id="closeDialog" class="close-button" aria-label="關閉">×</button>
+      </div>
+      <label class="field-label">項目名稱
+        <input name="title" required maxlength="36" placeholder="例如：咖啡店薪資" />
+      </label>
+      <div class="form-grid">
+        <label class="field-label">類型
+          <select name="type"><option value="expense">支出</option><option value="income">收入</option></select>
+        </label>
+        <label class="field-label">分類
+          <select name="category">
+            <option>餐飲</option><option>住宿</option><option>交通</option><option>薪資</option>
+            <option>日用品</option><option>娛樂</option><option>其他</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-grid">
+        <label class="field-label">金額
+          <input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00" />
+        </label>
+        <label class="field-label">幣別
+          <select name="currency"><option>USD</option><option selected>TWD</option><option>EUR</option><option>JPY</option><option>CAD</option></select>
+        </label>
+      </div>
+      <label class="field-label">日期<input name="date" type="date" required /></label>
+      <button class="button-primary submit-button" type="submit">儲存紀錄</button>
+      <p class="form-note">紀錄會儲存到你的帳號，其他帳號無法查看。</p>
+    </form>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+</html>
